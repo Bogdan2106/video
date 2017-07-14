@@ -24,11 +24,11 @@ class TopicController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
+                    // разрешаем аутентифицированным пользователям
                     [
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'allow' => true,
                         'roles' => ['admin'],
-                    ]
+                    ],
                 ],
             ],
             'verbs' => [
@@ -38,6 +38,7 @@ class TopicController extends Controller
                 ],
             ],
         ];
+
     }
 
     /**

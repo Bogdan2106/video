@@ -24,23 +24,21 @@ class VideoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update'],
                 'rules' => [
                     // разрешаем аутентифицированным пользователям
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ],
-
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
-        ],
-      ]
-    ];
+        ];
 
     }
 

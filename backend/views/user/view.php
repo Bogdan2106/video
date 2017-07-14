@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'sections',
                 'format' => 'raw',
-                'value' => implode(', ', $model->getAvailableSections())
+                'value' => implode(', ', $model->AvailableSections)
             ],
         ],
     ]) ?>

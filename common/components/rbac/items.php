@@ -2,11 +2,28 @@
 return [
     'dashboard' => [
         'type' => 2,
-        'description' => 'Admin panel',
+        'description' => 'Админ панель',
     ],
     'user' => [
         'type' => 1,
-        'description' => 'user',
+        'description' => 'Пользователь',
         'ruleName' => 'userRole',
+    ],
+    'student' => [
+        'type' => 1,
+        'description' => 'student',
+        'ruleName' => 'userRole',
+        'children' => [
+            'user',
+            'dashboard',
+        ],
+    ],
+    'admin' => [
+        'type' => 1,
+        'description' => 'admin',
+        'ruleName' => 'userRole',
+        'children' => [
+            'student',
+        ],
     ],
 ];

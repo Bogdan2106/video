@@ -11,9 +11,29 @@ namespace frontend\controllers;
 
 use common\models\Section;
 use yii\web\Controller;
+use yii\filters\AccessControl;
+
 
 class SectionController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['view'],
+                'rules' => [
+                    // разрешаем аутентифицированным пользователям
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // всё остальное по умолчанию запрещено
+                ],
+            ],
+        ];
+    }
+
     public function actionView($id){
         $section = Section::findOne($id);
 

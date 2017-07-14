@@ -23,9 +23,9 @@ class SectionController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                //'only' => [],
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]

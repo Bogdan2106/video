@@ -33,7 +33,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup', 'like'],
+                'only' => ['logout', 'signup', 'like', 'favorite'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -45,6 +45,7 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+
                 ],
             ],
             'verbs' => [
@@ -76,7 +77,6 @@ class SiteController extends Controller
 
     public function actionFavorite(){
         $content = 'Test';
-
         return $this->render('favorite', [
             'sentence' => $content
         ]);

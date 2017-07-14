@@ -265,7 +265,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function addSection(Section $section)
     {
-
         $subscriptionExists = Subscription::findOne([
             'user_id' => $this->id,
             'section_id' => $section->id
@@ -280,6 +279,20 @@ class User extends ActiveRecord implements IdentityInterface
             ]]);
 
             return $subscription->save();
+        }
+
+        return true;
+    }
+
+    public function deleteSection(Section $section)
+    {
+        $subscription = Subscription::findOne([
+            'user_id' => $this->id,
+            'section_id' => $section->id
+        ]);
+
+        if ($subscription) {
+            return $subscription->delete();
         }
 
         return true;
@@ -303,6 +316,11 @@ class User extends ActiveRecord implements IdentityInterface
             ->joinWith('users')
             ->where([User::tableName() . '.id' => $this->id])
             ->all();
+        /*$myid = $this->id;
+        $myid = $myid;
+        $jjj = Subscription::findAll(['user_id' => $myid]);
+        $jjj = $jjj;
+        return $jjj;*/
     }
 
     public static function getActiveTopicArray()

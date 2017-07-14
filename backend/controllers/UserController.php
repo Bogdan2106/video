@@ -9,6 +9,7 @@ use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -21,6 +22,16 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    // разрешаем аутентифицированным пользователям
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -28,6 +39,7 @@ class UserController extends Controller
                 ],
             ],
         ];
+
     }
 
     /**
@@ -66,6 +78,24 @@ class UserController extends Controller
     {
         $model = new User();
 
+        $post = Yii::$app->request->post();
+        if ($post['User']['password'] != null || $post['User']['password'] !== '') {
+            $model->setPassword($post['User']['password']);
+        }
+
+        $sections = $post['User']['section'];
+
+        if (is_array($sections)) {
+            foreach ($sections as $section) {
+                $sectionModel = Section::findOne($section);
+
+                if ($sectionModel) {
+                    $model->addSection($sectionModel);
+                }
+
+            }
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -84,32 +114,31 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        $user = Yii::$app->user->identity;
-
         $post = Yii::$app->request->post();
 
+        if (is_array($post['User'])) {
+            $sections = $post['User']['section'];
+            $userSections = $model->availableSections;
 
-        $sections = $post['User']['section'];
+            if (is_array($sections)) {
+                foreach ($sections as $section) {
+                    $sectionModel = Section::findOne($section);
 
-
-        if(is_array($sections)){
-
-            foreach ($sections as $section){
-
-                $sectionModel = Section::findOne($section);
-
-
-                if($sectionModel){
-                    $user->addSection($sectionModel);
+                    if ($sectionModel) {
+                        $model->addSection($sectionModel);
+                    }
                 }
-
             }
-        }
 
+            foreach ($userSections as $section) {
+                if (!in_array($section->id, $sections)) {
+                    $model->deleteSection($section);
+                }
+            }
 
-        if($post['User']['password'] != null || $post['User']['password'] !== ''){
-            $model->setPassword($post['User']['password']);
+            if ($post['User']['password'] != null || $post['User']['password'] !== '') {
+                $model->setPassword($post['User']['password']);
+            }
         }
 
         /**
@@ -118,7 +147,7 @@ class UserController extends Controller
          */
         if ($model->load($post) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        }else{
+        } else {
 
             $model->section = $model->getAvailableSections();
 
