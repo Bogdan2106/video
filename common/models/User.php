@@ -78,18 +78,45 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['username', 'string', 'max' => 100],
+            ['email', 'trim'],
             ['email', 'email'],
-            /** TODO: add to doc */
-//            ['email', 'common/component/Validator'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken. Эта почта уже занята.'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['role', 'default', 'value' => self::ROLE_USER],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_NOT_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
+
+    public function getStatusText()
+    {
+        switch ($this->status) {
+            case self::STATUS_DELETED:
+                return 'Deleted';
+            case self::STATUS_ACTIVE:
+                return 'Active';
+            case self::STATUS_NOT_ACTIVE:
+                return 'Not active';
+        }
+    }
     /**
      * @inheritdoc
      */
+
+    public function getRoleText()
+    {
+        switch ($this->role) {
+            case self::ROLE_ADMIN:
+                return 'Admin';
+            case self::ROLE_USER:
+                return 'User';
+            case self::ROLE_STUDENT:
+                return 'Student';
+        }
+    }
+
+
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);

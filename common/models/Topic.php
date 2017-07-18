@@ -15,7 +15,7 @@ use yii\web\UploadedFile;
  * @property integer $id
  * @property string $name
  * @property string $slug
-
+ * @property string $description
  * @property integer $status
  * @property integer $section_id
 
@@ -103,6 +103,18 @@ class Topic extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public function getStatusText()
+    {
+        switch ($this->status) {
+            case self::STATUS_DELETED:
+                return 'Deleted';
+            case self::STATUS_INV:
+                return 'Invisible';
+            case self::STATUS_ACTIVE:
+                return 'Active';
+        }
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -127,6 +139,27 @@ class Topic extends \yii\db\ActiveRecord
     public static function getActiveTopicArray()
     {
         return Topic::findAll(['status' => Topic::STATUS_ACTIVE]);
+    }
+
+    public function getCreatedBy($attribute)
+    {
+        /** @var User $user */
+        $user = User::findOne($this->created_by);
+
+        return $user->hasAttribute($attribute) ? $user->{$attribute} : $user->email;
+    }
+
+    public function getUpdatedBy($attribute)
+    {
+        /** @var User $user */
+        $user = User::findOne($this->updated);
+
+        return $user->hasAttribute($attribute) ? $user->{$attribute} : $user->email;
+    }
+
+    public function getDate($date)
+    {
+        return Yii::$app->formatter->asDate($date, 'medium');
     }
 
 

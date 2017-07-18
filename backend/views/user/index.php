@@ -31,10 +31,22 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'password_reset_token',
             // 'secret_key',
              'email:email',
-             'status',
+            [
+                'attribute' => 'status',
+                'format' => 'text',
+                'value' => function ($data) {
+                    return $data->StatusText;
+                },
+            ],
             // 'created_at',
             // 'updated_at',
-             'role',
+            [
+                'attribute' => 'role',
+                'format' => 'text',
+                'value' => function ($data) {
+                    return $data->RoleText;
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

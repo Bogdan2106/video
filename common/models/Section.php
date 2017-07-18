@@ -108,6 +108,19 @@ class Section extends \yii\db\ActiveRecord
         return $this->hasOne(Image::className(), ['id' => 'image_id']);
     }
 
+
+    public function getStatusText()
+    {
+        switch ($this->status) {
+            case self::STATUS_DELETED:
+                return 'Deleted';
+            case self::STATUS_INV:
+                return 'Invisible';
+            case self::STATUS_ACTIVE:
+                return 'Active';
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

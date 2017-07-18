@@ -27,8 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'slug',
-            'status',
-            'section_id',
+            [
+                'attribute' => 'status',
+                'format' => 'text',
+                'value' => function ($data) {
+                    return $data->StatusText;
+                },
+            ],
+            [
+                'label' => 'Section',
+                'format' => 'raw',
+                'value' => function ($data){
+                    return $data->section;
+                }
+            ],
             // 'created_at',
             // 'created_by',
             // 'updated_at',

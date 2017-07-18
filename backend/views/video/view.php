@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'image_id',
                 'format' => ['image',['width'=>'250']],
-                'value' => \common\models\Image::getImagesParentFolderLink().$model->image->path
+                //'value' => \common\models\Image::getImagesParentFolderLink().$model->image->path
             ],
             'path',
 

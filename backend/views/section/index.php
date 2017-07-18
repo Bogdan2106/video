@@ -27,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'slug',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'text',
+                'value' => function ($data) {
+                    return $data->StatusText;
+                },
+            ],
             'image_id',
             // 'created_at',
             // 'created_by',

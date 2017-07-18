@@ -81,6 +81,7 @@ class UserController extends Controller
         $post = Yii::$app->request->post();
         if ($post['User']['password'] != null || $post['User']['password'] !== '') {
             $model->setPassword($post['User']['password']);
+            $model->generateAuthKey();
         }
 
         $sections = $post['User']['section'];

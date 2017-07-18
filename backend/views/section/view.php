@@ -31,7 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'slug',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'text',
+                'value' => $model->StatusText,
+            ],
             [
                 'attribute' => 'image_id',
                 'format' => ['image',['width'=>'250']],

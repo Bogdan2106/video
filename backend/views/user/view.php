@@ -35,10 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'password_reset_token',
 //            'secret_key',
             'email:email',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'text',
+                'value' => $model->StatusText,
+            ],
 //            'created_at',
 //            'updated_at',
-            'role',
+            [
+                'attribute' => 'role',
+                'format' => 'text',
+                'value' => $model->RoleText,
+            ],
             [
                 'attribute' => 'sections',
                 'format' => 'raw',
