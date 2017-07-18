@@ -17,6 +17,8 @@ use common\models\User;
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'status')->dropDownList([
         \common\models\Topic::STATUS_ACTIVE => 'Active',
         \common\models\Topic::STATUS_INV => 'Invisible',
@@ -29,7 +31,7 @@ use common\models\User;
         ['prompt'=>'Select section']
     ) ?>
 
-    <?= $form->field($model, 'videoFile')->fileInput(['multiple' => true, 'accept' => 'video/*'.$model->slug])->label('Video') ?>
+<!--    --><?//= $form->field($model, 'videoFile')->fileInput(['multiple' => true, 'accept' => 'video/*'.$model->slug])->label('Video') ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -77,11 +77,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['username', 'string', 'max' => 100],
+            ['username', 'trim'],
+            ['username', 'string', 'max' => 50],
+            ['username', 'unique','targetClass' => '\common\models\User', 'message' => 'This name is taken.'],
+
             ['email', 'trim'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken. Эта почта уже занята.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address is taken.'],
+
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['role', 'default', 'value' => self::ROLE_USER],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_NOT_ACTIVE, self::STATUS_DELETED]],

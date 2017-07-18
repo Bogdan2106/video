@@ -76,7 +76,7 @@ class Topic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'slug','section_id'], 'required'],
+            [['name', 'slug', 'description','section_id'], 'required'],
             [['status', 'section_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'slug'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -93,7 +93,7 @@ class Topic extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'slug' => 'Slug',
-           
+            'description' => 'Description',
             'status' => 'Status',
             'section_id' => 'Section ID',
             'created_at' => 'Created At',
