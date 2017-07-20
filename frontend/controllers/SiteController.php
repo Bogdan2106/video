@@ -2,9 +2,10 @@
 namespace frontend\controllers;
 
 use common\models\Like;
+use common\models\Subscription;
 use common\models\User;
 use common\models\Video;
-use frontend\models\Favorite;
+
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -20,6 +21,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\Response;
 use yii\web\HttpException;
+use yii\data\Pagination;
 /**
  * Site controller
  */
@@ -75,12 +77,28 @@ class SiteController extends Controller
     }
 
 
-    public function actionFavorite(){
-        $content = 'Test';
+    public function actionFavorite()
+    {
+        $models = Like::find()->where(['user_id' => Yii::$app->user->id])->all();
         return $this->render('favorite', [
-            'sentence' => $content
+            'models' => $models
         ]);
     }
+
+
+//    public function actionFavorite($id){
+//        $query = Like::find()->where(['user_id' => Yii::$app->user->id]);
+//        $countQuery = clone $query;
+//        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+//        $models = $query->offset($pages->offset)
+//            ->limit($pages->limit)
+//            ->all();
+//        return $this->render('fave', [
+//            'models' => $models,
+//            'pages' => $pages,
+//        ]);
+//    }
+
 
     /**
      * Displays homepage.
@@ -268,9 +286,9 @@ class SiteController extends Controller
 //            return $this->redirect(['/user/account/login']);
 //    }
 
-    public function actionGuest(){
-        if (!Yii::$app->user->can('admin') || !Yii::$app->user->can('user') || !Yii::$app->user->can('student'))
-
-        return $this->redirect(['index']);
-    }
+//    public function actionGuest(){
+//        if (!Yii::$app->user->can('admin') || !Yii::$app->user->can('user') || !Yii::$app->user->can('student'))
+//
+//        return $this->redirect(['index']);
+//    }
 }

@@ -26,12 +26,12 @@ use yii\db\ActiveRecord;
  * @property Like[] $likes
  * @property User[] $users
  * @property Image $image
- * @property Video $videofile
+ * @property Video $videoFile
  * @property Topic $topic
  */
 class Video extends \yii\db\ActiveRecord
 {
-    public $videofile;
+    public $videoFile;
     public $imageFile;
 
     /**
@@ -70,9 +70,12 @@ class Video extends \yii\db\ActiveRecord
             [['name', 'path', 'description', 'topic_id', 'image_id'], 'required'],
             [['topic_id', 'image_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'path', 'description'], 'string', 'max' => 255],
-            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['topic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Topic::className(), 'targetAttribute' => ['topic_id' => 'id']],
-            [['videofile'],'file', 'skipOnEmpty' => false, 'extensions' => 'mp4'],
+            [['image_id'], 'exist', 'skipOnError' => false, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
+            //[['videofile'],'file', 'skipOnEmpty' => false, 'extensions' => 'mp4'],
+            [['videoFile'],'file', 'extensions' => 'mp4'],
+           // [['videofile'],'file', 'skipOnEmpty' => false, 'on' => 'create'],
+            [['videoFile', 'imageFile'],'file', 'skipOnEmpty' => false, 'on' => 'create'],
         ];
     }
 
@@ -160,37 +163,41 @@ class Video extends \yii\db\ActiveRecord
         return $this->hasOne(Topic::className(), ['id' => 'topic_id']);
     }
 
-    public function upload($file, $image)
+    public function upload()
     {
-        $uploadedImage = Image::upload($image,"images/section/" . Section::findOne(Topic::findOne($this->topic_id)->section_id)->slug);
-        $this->videofile = $file;
-        if (!$this->videofile) return null;
-        $folder = $this->topic->slug;
-        $path = self::getVideoParentFolderPath();
+        $image = $this->imageFile;
+        $file = $this->videoFile;
 
-        $directory = $path . '/' . $folder;
-        FileHelper::createDirectory($directory, 0777);
-        //echo "$directory/$videoName." . $this->videofile->extension . "<br>";
-        $this->videofile->saveAs("$directory/$file->basename." . $this->videofile->extension, false);
+        if (!$this->validate(['imageFile', 'videoFile'])) return false;
 
-        if (!$this->isNewRecord) {
-            try{
-                unlink($path ."/$this->path");
-            }catch (\Exception $exception){
-
-            }
+        if ($image) {
+            $uploadedImage = Image::upload($image,"images/section/" . Section::findOne(Topic::findOne($this->topic_id)->section_id)->slug);
+            $this->image_id = $uploadedImage->id;
         }
 
-        $this->path = "video/" . $folder . "/$file->basename." . $this->videofile->extension;
-        $this->image_id = $uploadedImage->id;
+        if ($this->videoFile) {
+            $folder = $this->topic->slug;
+            $path = self::getVideoParentFolderPath();
+
+            $directory = $path . '/' . $folder;
+            $fileName = time() . uniqid() . '.' . $this->videoFile->extension;
+            FileHelper::createDirectory($directory, 0777);
+            //echo "$directory/$videoName." . $this->videofile->extension . "<br>";
+            $this->videoFile->saveAs("$directory/$fileName", false);
+
+            if (!$this->isNewRecord) {
+                try {
+                    unlink($path . "/$this->path");
+                } catch (\Exception $exception) {
+
+                }
+            }
+
+            $this->path = "video/" . $folder . "/$fileName";
+        }
         //die($this->path);
 
-
-        if ($this->save()) {
-            //var_dump($this->id);
-            return $this;
-        }
-        return null;
+        return $this;
     }
     public function getCreatedBy($attribute)
     {

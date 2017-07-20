@@ -37,7 +37,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const ROLE_ADMIN = 1;
     const ROLE_USER = 0;
-    const ROLE_STUDENT = 55;
+   // const ROLE_STUDENT = 55;
     //const ROLE_UNIVERSITY = 66;
 
     public $password;
@@ -87,6 +87,9 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address is taken.'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
+
+            ['section', 'required'],
+
             ['role', 'default', 'value' => self::ROLE_USER],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_NOT_ACTIVE, self::STATUS_DELETED]],
         ];
@@ -115,8 +118,8 @@ class User extends ActiveRecord implements IdentityInterface
                 return 'Admin';
             case self::ROLE_USER:
                 return 'User';
-            case self::ROLE_STUDENT:
-                return 'Student';
+//            case self::ROLE_STUDENT:
+//                return 'Student';
         }
     }
 

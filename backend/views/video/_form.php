@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
     ) ?>
     <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*'])->label('Image') ?>
 
-    <?= $form->field($model, 'videofile')->fileInput(['accept' => 'video/*'])->label('Video') ?>
+    <?= $form->field($model, 'videoFile')->fileInput(['accept' => 'video/*'])->label('Video') ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update',

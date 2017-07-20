@@ -4,9 +4,10 @@ use common\models\User;
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = $section->name;
 
 /** @var User $user */
+
 $user = Yii::$app->user->identity;
 
 ?>

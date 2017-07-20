@@ -16,7 +16,7 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\PhpManager',
-            'defaultRoles' => ['user', 'student', 'admin'],
+            'defaultRoles' => ['user', 'admin'],
             'itemFile' => '@common/components/rbac/items.php',
             'assignmentFile' => '@common/components/rbac/assignments.php',
             'ruleFile' => '@common/components/rbac/rules.php'

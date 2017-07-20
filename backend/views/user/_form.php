@@ -39,7 +39,7 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'role')->dropDownList([
         \common\models\User::ROLE_ADMIN  => 'Admin',
         \common\models\User::ROLE_USER  => 'User',
-        \common\models\User::ROLE_STUDENT => 'Student',
+       // \common\models\User::ROLE_STUDENT => 'Student',
 
     ]) ?>
 

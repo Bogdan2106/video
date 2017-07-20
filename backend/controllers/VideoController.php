@@ -77,9 +77,13 @@ class VideoController extends Controller
     public function actionCreate()
     {
         $model = new Video();
-        $image = new Image();
+        $load = $model->load(Yii::$app->request->post());
 
-        if ($model->load(Yii::$app->request->post()) && $model->upload(UploadedFile::getInstance($model, 'videofile'), UploadedFile::getInstance($model, 'imageFile'))) {
+        $model->videoFile = UploadedFile::getInstance($model, 'videoFile');
+        $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+        $model->setScenario('create');
+
+        if ($load && $model->upload() && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             //die($image->imageFile);
@@ -98,8 +102,12 @@ class VideoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $load = $model->load(Yii::$app->request->post());
 
-        if ($model->load(Yii::$app->request->post()) && $model->upload() && $model->save()) {
+        $model->videoFile = UploadedFile::getInstance($model, 'videoFile');
+        $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+        if ($load && $model->upload() && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

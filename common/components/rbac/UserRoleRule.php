@@ -9,17 +9,15 @@ class UserRoleRule extends Rule
     public $name = 'userRole';
     public function execute($user, $item, $params)
     {
-        $user = ArrayHelper::getValue($params, 'user', User::findOne($user));
+        //Получаем массив пользователя из базы
+        $user = ArrayHelper::getValue($params, 'user', Yii::$app->user->identity);
+        // Yii::$app->user->id == $user ? ... : User::findOne($user)
         if ($user) {
-            $role = $user->role; //Значение из поля role базы данных
+            $role = $user->role;
             if ($item->name === 'admin') {
                 return $role == User::ROLE_ADMIN;
-            } elseif ($item->name === 'student') {
+            } elseif ($item->name === 'user') {
                 return $role == User::ROLE_ADMIN || $role == User::ROLE_USER;
-            }
-            elseif ($item->name === 'user') {
-                return $role == User::ROLE_ADMIN || $role == User::ROLE_USER
-                    || $role == User::ROLE_USER;
             }
         }
         return false;

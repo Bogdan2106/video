@@ -76,9 +76,10 @@ class Section extends \yii\db\ActiveRecord
             [['name', 'slug'], 'required'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['status', 'image_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+//            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
             [['name', 'slug'], 'string'],
             [['name', 'slug'], 'unique'],
-//            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
+            [['image_id'], 'exist', 'skipOnError' => false, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
         ];
     }
 
@@ -182,10 +183,11 @@ class Section extends \yii\db\ActiveRecord
     public function uploadImage()
     {
         /** Берем файл из модели */
-        $file = UploadedFile::getInstance($this, 'imageFile');
-
+        $imageFile = UploadedFile::getInstance($this, 'imageFile');
+        if ($imageFile == null)
+            return false;
         /** Пользуемся своей функцией для аплоада картинки, получаем обьект картинки */
-        if ($image = Image::upload($file, "images/section/$this->slug", $this->image ? $this->image->id : null)) {
+        if ($image = Image::upload($imageFile, "images/section/$this->slug", $this->image ? $this->image->id : null)) {
             $this->image_id = $image->id;
             return true;
         }

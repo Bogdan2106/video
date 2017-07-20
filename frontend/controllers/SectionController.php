@@ -10,9 +10,10 @@ namespace frontend\controllers;
 
 
 use common\models\Section;
-use yii\web\Controller;
-use yii\filters\AccessControl;
 
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\web\BadRequestHttpException;
 
 class SectionController extends Controller
 {
@@ -28,7 +29,7 @@ class SectionController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    // всё остальное по умолчанию запрещено
+
                 ],
             ],
         ];
@@ -36,6 +37,14 @@ class SectionController extends Controller
 
     public function actionView($id){
         $section = Section::findOne($id);
+
+        if (!$section) {
+            throw new BadRequestHttpException('no $section'); // change
+        }
+
+        if (!\Yii::$app->user->identity->hasAccessFor($section)) {
+            throw new BadRequestHttpException('You don`t have access to this $section');
+        }
 
         $topics = $section->getTopics()->all();
 

@@ -115,7 +115,6 @@ class Image extends \yii\db\ActiveRecord
                 //log
             }
         }
-
         /** делаем необходинмые манипуляции с обьектом картинки  */
         $modelImage->name = $file->baseName;
         $modelImage->path = $folder . "/$imageName." . $file->extension;
